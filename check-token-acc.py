@@ -6,10 +6,7 @@ app = Flask(__name__)
 
 # ================== Hàm check token ==================
 def check_token_valid(token):
-    """
-    Decode JWT token không cần verify chữ ký,
-    chỉ check exp còn hạn hay không.
-    """
+    """Decode JWT token không cần verify chữ ký, chỉ check exp còn hạn hay không."""
     try:
         decoded = jwt.decode(token, options={"verify_signature": False})
         exp_ts = decoded.get("exp")
@@ -23,9 +20,15 @@ def check_token_valid(token):
     except Exception as e:
         return False, f"Invalid token: {e}", None
 
+
 # ================== API Check Token/File ==================
 @app.route('/api/check_token_file', methods=['GET'])
 def check_token_file():
+    # ✅ Check key bảo mật
+    key = request.args.get("key")
+    if key != "hentaiz":
+        return jsonify({"error": "Unauthorized. Invalid key!"}), 403
+
     token_file = request.args.get("token_file")
     if not token_file:
         return jsonify({"error": "token_file parameter is required"}), 400
@@ -91,6 +94,7 @@ def check_token_file():
         "results": results,
         "table": str(table)  # in bảng ra dưới dạng text
     })
+
 
 # ================== Main ==================
 if __name__ == '__main__':
