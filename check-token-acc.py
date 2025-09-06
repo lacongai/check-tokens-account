@@ -24,7 +24,7 @@ def check_token_valid(token):
         return False, f"Invalid token: {e}", None
 
 # ================== API Check Token/File ==================
-@app.route('/check_token_file', methods=['GET'])
+@app.route('/api/check_token_file', methods=['GET'])
 def check_token_file():
     token_file = request.args.get("token_file")
     if not token_file:
